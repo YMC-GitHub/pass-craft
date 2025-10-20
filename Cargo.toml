@@ -1,7 +1,14 @@
 [package]
 name = "pass-craft"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
+description = "A cross-platform password hash generation written in Rust"
+authors = ["YeMiancheng <ymc.github@gmail.com>"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/ymc-github/pass-craft"
+readme = "README.md"
+keywords = ["password", "hash", "generator", "craft"]
+categories = ["command-line-utilities", "password-programming"]
 
 [dependencies]
 clap = { version = "4.0", features = ["derive"] }
