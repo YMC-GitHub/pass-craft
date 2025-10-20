@@ -407,6 +407,7 @@ extract_binary() {
     info_status "$step_name" 0
 }
 
+
 extract_window_gnu_binary() {
     local step_name="提取二进制文件"
     info_step "$step_name"
