@@ -1,0 +1,27 @@
+[package]
+name = "pass-craft"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+clap = { version = "4.0", features = ["derive"] }
+regex = "1.0"
+md5 = "0.7.0"
+sha1 = "0.10.0"
+sha2 = "0.10.0"
+anyhow = "1.0"
+log = "0.4"
+env_logger = "0.10"
+serde = { version = "1.0", features = ["derive"] }
+chrono = { version = "0.4", features = ["serde"] }
+
+
+# Add this section if using non-standard paths
+[[bin]]
+name = "pass-craft"
+path = "src/main.rs"  # or your actual main file path
+
+# Or if it's a library:
+# [lib]
+# name = "pass_craft"
+# path = "src/lib.rs"
