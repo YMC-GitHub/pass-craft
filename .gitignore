@@ -1,0 +1,22 @@
+**/target/
+**/.git/
+# **/.github/
+# **/Dockerfile*
+# **/docker-compose*
+**/.env
+**/*.log
+**/tmp/
+**/.DS_Store
+**/*.tar.gz
+**/*.zip
+
+!.dockerignore
+!Cargo.toml
+!Cargo.lock
+!src/
+
+/dist
+
+.env.local
+.env.prod
+.env.dev
