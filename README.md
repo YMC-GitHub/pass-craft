@@ -6,9 +6,16 @@
 A lightweight Docker image application that password hash generationin Rust.
 
 ### Available Tags
-- `scratch` (1.27MB) - Built on `alpine` and deployed on `scratch` as runtime image
-- ~~`alpine` (12.8MB) - Built on `alpine` and deployed on `alpine` as runtime image~~
-- `latest` (1.27MB) - Uses `scratch` version as latest image
+- `scratch` - Built on `alpine` and deployed on `scratch` as runtime image
+- ~~`alpine`- Built on `alpine` and deployed on `alpine` as runtime image~~
+- `latest` - Uses `scratch` version as latest image
+
+```
+REPOSITORY   TAG       SIZE
+pass-craft   latest    820kB
+pass-craft   scratch   820kB
+pass-craft   alpine    8.62MB
+```
 
 ## Quick Start
 

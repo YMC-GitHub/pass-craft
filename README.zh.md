@@ -5,9 +5,16 @@
 一个轻量级的 Docker 镜像应用，用于生成密码哈希，使用 Rust 实现。
 
 ### 可用标签
-- `scratch` (1.27MB) - 基于 `alpine` 构建，在 `scratch` 上部署为运行时镜像
-- ~~`alpine` (12.8MB) - 基于 `alpine` 构建，在 `alpine` 上部署为运行时镜像~~
-- `latest` (1.27MB) - 使用 `scratch` 版本作为最新镜像
+- `scratch`  - 基于 `alpine` 构建，在 `scratch` 上部署为运行时镜像
+- ~~`alpine`  - 基于 `alpine` 构建，在 `alpine` 上部署为运行时镜像~~
+- `latest` - 使用 `scratch` 版本作为最新镜像
+
+```
+REPOSITORY   TAG       SIZE
+pass-craft   latest    820kB
+pass-craft   scratch   820kB
+pass-craft   alpine    8.62MB
+```
 
 ## 快速开始
 
