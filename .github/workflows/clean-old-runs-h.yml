@@ -1,0 +1,37 @@
+name: Cleanup Old Workflow Runs
+
+on:
+#   schedule:
+#     # 每小时运行一次
+#     - cron: '0 * * * *'
+  workflow_dispatch:
+    inputs:
+      hours_old:
+        description: '删除超过多少小时的记录'
+        required: true
+        default: '4'
+        type: string
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: read
+    
+    steps:
+      - name: Cleanup workflow runs
+        run: |
+          # 设置默认值
+          HOURS_OLD=${HOURS_OLD:-4}
+          
+          # 获取所有 workflow 运行记录
+          echo "正在删除超过 $HOURS_OLD 小时的 workflow 运行记录..."
+          
+          # 使用 GitHub CLI 删除旧记录
+          gh run list --json databaseId,createdAt,workflowName --jq ".[] | select(.createdAt < (now - $HOURS_OLD*60*60)) | .databaseId" | xargs -I {} gh run delete {} --yes
+          
+          echo "清理完成！"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HOURS_OLD: ${{ inputs.hours_old }}
