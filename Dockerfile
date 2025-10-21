@@ -237,7 +237,12 @@ COPY --from=certs /usr/share/zoneinfo /usr/share/zoneinfo
 ENV TZ=Asia/Shanghai
 
 # 复制二进制文件
+ORKDIR /app
 COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/pass-craft /app/pass-craft
+
+# 健康检查
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD [ "/app/pass-craft", "--version" ] || exit 1
 
 # 设置入口点
 ENTRYPOINT ["/app/pass-craft"]
@@ -259,8 +264,12 @@ COPY --from=certs /usr/share/zoneinfo /usr/share/zoneinfo
 ENV TZ=Asia/Shanghai
 
 # 复制二进制文件
+ORKDIR /app
 COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/pass-craft /app/pass-craft
+
+# 健康检查
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD [ "/app/pass-craft", "--version" ] || exit 1
 
 # 设置入口点
 ENTRYPOINT ["/app/pass-craft"]
-
