@@ -15,3 +15,9 @@ insert_final_newline = false
 [*.ps1]
 end_of_line = crlf
 charset = utf-8
+
+[*.yml]
+indent_style = space
+indent_size = 2
+end_of_line = lf
+charset = utf-8
