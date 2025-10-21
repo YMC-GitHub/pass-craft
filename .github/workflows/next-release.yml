@@ -1,8 +1,9 @@
 name: Multi-Platform Build and Release
 
 on:
-  tags:
-    - 'v*'  # 推送 v 开头的标签时触发
+  push:
+    tags:
+      - 'v*'  # 推送 v 开头的标签时触发
   workflow_dispatch:  # 允许手动触发
     inputs:
       debug_mode:

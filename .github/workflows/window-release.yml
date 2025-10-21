@@ -1,7 +1,7 @@
 name: Build Windows Binaries and Release
 
 on:
-  push:
+  #push:
     # tags:
     #   - 'v*'  # 推送 v 开头的标签时触发
   workflow_dispatch:  # 允许手动触发
