@@ -56,7 +56,8 @@ jobs:
           run_ids=$(gh run list --repo $GITHUB_REPOSITORY \
             --json databaseId,createdAt,workflowName,status \
             --limit 200 \
-            --jq ".[] | select(.createdAt < (now - $HOURS_OLD*60*60)) | .databaseId")
+            --jq ".[] | select((.createdAt | fromdateiso8601) < (now - ($HOURS_OLD|tonumber)*60*60)) | .databaseId")
+          
           
           if [ -z "$run_ids" ]; then
             echo "没有找到需要删除的运行记录。"
