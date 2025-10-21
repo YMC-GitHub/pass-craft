@@ -35,6 +35,23 @@ jobs:
           echo "模式: $([ "$DRY_RUN" = "true" ] && echo "预览模式" || echo "删除模式")"
           echo "时间阈值: $HOURS_OLD 小时"
           
+          echo "=== 测试获取运行记录 ==="
+          gh run list --repo $GITHUB_REPOSITORY \
+          --json databaseId,createdAt,workflowName,status \
+          --limit 3
+
+          echo "=== 详细时间分析 ==="
+          gh run list --repo $GITHUB_REPOSITORY \
+            --json databaseId,createdAt,workflowName,status \
+            --limit 5 \
+            --jq ".[] | {
+              id: .databaseId, 
+              created: .createdAt,
+              created_epoch: (.createdAt | fromdateiso8601),
+              threshold: (now - ($HOURS_OLD|tonumber)*60*60),
+              should_delete: ((.createdAt | fromdateiso8601) < (now - ($HOURS_OLD|tonumber)*60*60))
+            }"
+
           # 获取需要删除的运行记录
           run_ids=$(gh run list --repo $GITHUB_REPOSITORY \
             --json databaseId,createdAt,workflowName,status \
