@@ -38,6 +38,7 @@ docker run --rm yemiancheng/pass-craft:latest --version
 docker run --rm yemiancheng/pass-craft:latest --show-platform
 
 # 用例1：使用文件配置
+# echo "name:john,email:john@gmail.com,site:john.com;method:sha512,cut:8,end:+,upper-start:5" >> passwords.example.md
 docker run --rm -v $(pwd):/app --name pass-craft yemiancheng/pass-craft:latest --file passwords.example.md --save passwords.example.md
 
 # 用例2：使用SSLF格式配置
