@@ -1,8 +1,8 @@
 name: Cleanup Old Workflow Runs Hourly
 
 on:
-  schedule:
-    - cron: '0 * * * *'  # 每小时运行
+  # schedule:
+  #   - cron: '0 * * * *'  # 每小时运行
   workflow_dispatch:
     inputs:
       hours_old:
