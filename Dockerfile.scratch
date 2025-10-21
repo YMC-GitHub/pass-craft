@@ -26,7 +26,12 @@ FROM scratch
 COPY --from=0 /usr/share/zoneinfo /usr/share/zoneinfo
 ENV TZ=Asia/Shanghai
 
+WORKDIR /app
 COPY pass-craft /app/
+
+# 健康检查
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD [ "/app/pass-craft", "--version" ] || exit 1
 
 # USER 1000:1000
 ENTRYPOINT ["/app/pass-craft"]

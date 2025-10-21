@@ -81,5 +81,10 @@ COPY --from=runtime-base /usr/lib/libgcc_s.so.1 /usr/lib/
 # 复制应用程序
 COPY --from=builder /app/target/release/pass-craft /app/
 
+WORKDIR /app
+# 健康检查
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD [ "/app/pass-craft", "--version" ] || exit 1
+
 # 设置入口点
 ENTRYPOINT ["/app/pass-craft"]
