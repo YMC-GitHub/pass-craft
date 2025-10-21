@@ -1,9 +1,9 @@
 name: Cleanup Old Workflow Runs Hourly
 
 on:
-#   schedule:
-#     # 每小时运行一次
-#     - cron: '0 * * * *'
+  schedule:
+    # 每小时运行一次
+    - cron: '0 * * * *'
   workflow_dispatch:
     inputs:
       hours_old:
@@ -20,18 +20,34 @@ jobs:
       contents: read
     
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup GitHub CLI
+        run: |
+          # 配置 GitHub CLI 使用正确的仓库上下文
+          gh auth setup-git
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
       - name: Cleanup workflow runs
         run: |
           # 设置默认值
           HOURS_OLD=${HOURS_OLD:-4}
           
-          # 获取所有 workflow 运行记录
           echo "正在删除超过 $HOURS_OLD 小时的 workflow 运行记录..."
           
           # 使用 GitHub CLI 删除旧记录
-          gh run list --json databaseId,createdAt,workflowName --jq ".[] | select(.createdAt < (now - $HOURS_OLD*60*60)) | .databaseId" | xargs -I {} gh run delete {} --yes
+          # 添加 --repo 参数明确指定仓库
+          gh run list --repo $GITHUB_REPOSITORY --json databaseId,createdAt,workflowName --limit 100 --jq ".[] | select(.createdAt < (now - $HOURS_OLD*60*60)) | .databaseId" | while read -r run_id; do
+            if [ -n "$run_id" ]; then
+              echo "删除运行记录: $run_id"
+              gh run delete "$run_id" --repo $GITHUB_REPOSITORY --yes
+            fi
+          done
           
           echo "清理完成！"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           HOURS_OLD: ${{ inputs.hours_old }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
