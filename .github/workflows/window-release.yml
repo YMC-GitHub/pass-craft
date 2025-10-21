@@ -184,10 +184,14 @@ jobs:
     needs: build-windows-binaries
     permissions:
       contents: write
+    # if: >
+    #   (startsWith(github.ref, 'refs/tags/v') && 
+    #   !inputs.debug_mode && 
+    #   inputs.enable_release)
     if: >
-      (startsWith(github.ref, 'refs/tags/v') && 
-      !inputs.debug_mode && 
-      inputs.enable_release)
+      startsWith(github.ref, 'refs/tags/') &&
+      github.event.inputs.enable_release == 'true' &&
+      github.event.inputs.debug_mode != 'true'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
