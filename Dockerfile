@@ -237,7 +237,7 @@ COPY --from=certs /usr/share/zoneinfo /usr/share/zoneinfo
 ENV TZ=Asia/Shanghai
 
 # 复制二进制文件
-ORKDIR /app
+WORKDIR /app
 COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/pass-craft /app/pass-craft
 
 # 健康检查
@@ -264,7 +264,7 @@ COPY --from=certs /usr/share/zoneinfo /usr/share/zoneinfo
 ENV TZ=Asia/Shanghai
 
 # 复制二进制文件
-ORKDIR /app
+WORKDIR /app
 COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/pass-craft /app/pass-craft
 
 # 健康检查
