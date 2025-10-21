@@ -230,19 +230,19 @@ ARG RUST_MIRROR
 
 
 # 复制 SSL 证书（必须，因为你的应用需要 HTTPS）
-COPY --from=certs /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+# COPY --from=certs /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
 # 时区信息
-COPY --from=certs /usr/share/zoneinfo /usr/share/zoneinfo
-ENV TZ=Asia/Shanghai
+# COPY --from=certs /usr/share/zoneinfo /usr/share/zoneinfo
+# ENV TZ=Asia/Shanghai
 
 # 复制二进制文件
 WORKDIR /app
 COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/pass-craft /app/pass-craft
 
 # 健康检查
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD [ "/app/pass-craft", "--version" ] || exit 1
+# HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+#     CMD [ "/app/pass-craft", "--version" ] || exit 1
 
 # 设置入口点
 ENTRYPOINT ["/app/pass-craft"]
@@ -257,19 +257,19 @@ ARG RUST_MIRROR
 
 
 # 复制 SSL 证书（必须，因为你的应用需要 HTTPS）
-COPY --from=certs /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+# COPY --from=certs /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
 # 时区信息
-COPY --from=certs /usr/share/zoneinfo /usr/share/zoneinfo
-ENV TZ=Asia/Shanghai
+# COPY --from=certs /usr/share/zoneinfo /usr/share/zoneinfo
+# ENV TZ=Asia/Shanghai
 
 # 复制二进制文件
 WORKDIR /app
 COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/pass-craft /app/pass-craft
 
 # 健康检查
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD [ "/app/pass-craft", "--version" ] || exit 1
+# HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+#     CMD [ "/app/pass-craft", "--version" ] || exit 1
 
 # 设置入口点
 ENTRYPOINT ["/app/pass-craft"]
