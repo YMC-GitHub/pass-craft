@@ -289,7 +289,7 @@ jobs:
     needs: [build-linux, build-windows, build-macos]
     permissions:
       contents: write
-    # if: startsWith(github.ref, 'refs/tags/v') && !github.event.inputs.debug_mode
+    if: startsWith(github.ref, 'refs/tags/v') && !github.event.inputs.debug_mode
     
     steps:
       - name: Checkout repository
