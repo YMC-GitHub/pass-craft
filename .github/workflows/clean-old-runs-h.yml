@@ -2,8 +2,7 @@ name: Cleanup Old Workflow Runs Hourly
 
 on:
   schedule:
-    # 每小时运行一次
-    - cron: '0 * * * *'
+    - cron: '0 * * * *'  # 每小时运行
   workflow_dispatch:
     inputs:
       hours_old:
@@ -11,6 +10,11 @@ on:
         required: true
         default: '4'
         type: string
+      dry_run:
+        description: '仅显示将要删除的记录，不实际删除'
+        required: false
+        default: 'false'
+        type: boolean
 
 jobs:
   cleanup:
@@ -23,31 +27,42 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup GitHub CLI
-        run: |
-          # 配置 GitHub CLI 使用正确的仓库上下文
-          gh auth setup-git
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
       - name: Cleanup workflow runs
         run: |
-          # 设置默认值
           HOURS_OLD=${HOURS_OLD:-4}
+          DRY_RUN=${DRY_RUN:-false}
           
-          echo "正在删除超过 $HOURS_OLD 小时的 workflow 运行记录..."
+          echo "模式: $([ "$DRY_RUN" = "true" ] && echo "预览模式" || echo "删除模式")"
+          echo "时间阈值: $HOURS_OLD 小时"
           
-          # 使用 GitHub CLI 删除旧记录
-          # 添加 --repo 参数明确指定仓库
-          gh run list --repo $GITHUB_REPOSITORY --json databaseId,createdAt,workflowName --limit 100 --jq ".[] | select(.createdAt < (now - $HOURS_OLD*60*60)) | .databaseId" | while read -r run_id; do
-            if [ -n "$run_id" ]; then
-              echo "删除运行记录: $run_id"
-              gh run delete "$run_id" --repo $GITHUB_REPOSITORY --yes
-            fi
-          done
+          # 获取需要删除的运行记录
+          run_ids=$(gh run list --repo $GITHUB_REPOSITORY \
+            --json databaseId,createdAt,workflowName,status \
+            --limit 200 \
+            --jq ".[] | select(.createdAt < (now - $HOURS_OLD*60*60)) | .databaseId")
           
-          echo "清理完成！"
+          if [ -z "$run_ids" ]; then
+            echo "没有找到需要删除的运行记录。"
+            exit 0
+          fi
+          
+          echo "找到 $(echo "$run_ids" | wc -l) 条需要处理的运行记录:"
+          echo "$run_ids"
+          
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "预览模式：以上运行记录将被删除（实际未执行删除操作）"
+          else
+            echo "开始删除运行记录..."
+            echo "$run_ids" | while read -r run_id; do
+              if [ -n "$run_id" ]; then
+                echo "删除运行记录: $run_id"
+                gh run delete "$run_id" --repo $GITHUB_REPOSITORY --yes
+              fi
+            done
+            echo "清理完成！"
+          fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           HOURS_OLD: ${{ inputs.hours_old }}
+          DRY_RUN: ${{ inputs.dry_run }}
           GITHUB_REPOSITORY: ${{ github.repository }}
