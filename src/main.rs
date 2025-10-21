@@ -114,14 +114,6 @@ struct CliArgs {
     /// Show platform information and exit
     #[arg(long, default_value = "false")]
     show_platform: bool,
-
-    /// Operation mode [default: interactive]
-    #[arg(long, default_value = "interactive")]
-    mode: String,
-
-    /// Run once and exit
-    #[arg(long, default_value = "false")]
-    once: bool,
 }
 
 /// Application configuration
@@ -797,10 +789,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
             
             // If running in once mode, exit after completion
-            if cli_args.once {
-                info_step("Completed (One-time Mode)", 50, '=');
-                return Ok(());
-            }
+            // if cli_args.once {
+            //     info_step("Completed (One-time Mode)", 50, '=');
+            //     return Ok(());
+            // }
         }
         Err(e) => {
             info_step("Password Generation Failed", 50, '!');
